@@ -7,7 +7,7 @@ export const addCommentForMovie = (objectId, name, comment) => {
     // Create a pointer to the Movie object
     const Movie = Parse.Object.extend("Movie");
     const moviePointer = new Movie();
-    moviePointer.id = ObjectId;
+    moviePointer.id = objectId;// changed 'ObjectId' to 'objectId', to be consistent with 'objectId' argument
 
     // Set the fields for the new comment
     newComment.set("author", name);
