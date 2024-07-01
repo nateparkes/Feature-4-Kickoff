@@ -1,57 +1,27 @@
-import {useState, useEffect} from "react";
-import { getAllLessons } from "../../Services/LearnService";
-import { getAllMovies } from "../../Services/GetMoviesService";
+import React from "react";
+import './MainList.css';
 
-const MainList = () => {
-    const [lessons, setLessons] = useState([]);
-    const [movies, setMovies] = useState([]);
-
-    useEffect(()=>{
-        getAllLessons().then((lessons) => {
-            setLessons(lessons);
-        })
-    },[]);
-
-    useEffect(()=>{
-        getAllMovies().then((movies)=> {
-            setMovies(movies);
-        })
-    },[]);
-
-    return(
-        <div>
-            <hr />
-            This is part 1 of the main list parent component: Lessons!
-            <div>
-                { lessons.length > 0 && (
-                    <ul>
-                        {lessons.map((lesson) => (
-                            <div>
-                                <span>
-                                    <li key={lesson.objectId}>{lesson.get("name")}</li>
-                                </span>
-                            </div>
-                        ))}
-                    </ul>
-                ) }
-            </div>
-            <hr />
-            This is part 2 of the main list parent component: Movies from 1999!
-            <div>
-                { movies.length > 0 && (
-                    <ul>
-                        {movies.map((movie) => (
-                            <div>
-                                <span>
-                                    <li key={movie.objectId}>{movie.get("title")} has a {movie.get("rotten_tomatoes_rating")}% fresh rating on RT</li>
-                                </span>
-                            </div>
-                        ))}
-                    </ul>
-                )}
-            </div>
-        </div>
-    )
-}
+const MainList = ({ movies, onSelect }) => {
+  return (
+    <div className="container">
+      {movies.length > 0 ? (
+        <ul className="list">
+          {movies.map((movie) => (
+            <li key={movie.id} className="listItem" onClick={() => onSelect(movie)}>
+              <div className="movieCard">
+                <h3 className="title">{movie.get("title")}</h3>
+                <p className="rating">{movie.get("rotten_tomatoes_rating")}% on Rotten Tomatoes</p>
+                <p className="boxOffice">${movie.get("total_domestic_box_office").toLocaleString()} domestic box office total</p>
+                <a href={movie.get("amazon_link")} className="button" target="_blank" rel="noopener noreferrer">Watch now</a>
+              </div>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>No movies available</p>
+      )}
+    </div>
+  );
+};
 
 export default MainList;
