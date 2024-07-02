@@ -1,5 +1,9 @@
 # Student A: Nate Parkes
 # Student B: Ruyuan Wan
+
+Here is the component tree for our project: ![Component Tree](./Tree Diagram.pdf)
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
