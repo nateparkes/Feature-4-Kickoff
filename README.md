@@ -1,7 +1,7 @@
 # Student A: Nate Parkes
 # Student B: Ruyuan Wan
 
-Here is the component tree for our project: ![Component Tree](./Tree Diagram.pdf)
+Here is the component tree for our project: ![Component Tree](./Tree_diagram.png)
 
 
 # Getting Started with Create React App
