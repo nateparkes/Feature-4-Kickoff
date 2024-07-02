@@ -3,6 +3,8 @@
 
 Here is the component tree for our project: ![Component Tree](./Tree_diagram.png)
 
+Here is the UML for our project: ![UML](./UML.png)
+
 
 # Getting Started with Create React App
 
