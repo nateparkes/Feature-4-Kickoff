@@ -51,7 +51,7 @@ const Comments = () => {
             <li key={movie.id}>
               <button onClick={() => navigate("/comments", { state: { selectedMovie: { id: movie.id, title: movie.get("title") } } })}>
                 {movie.get("title")}
-              </button> // Button to navigate to comments page with selected movie
+              </button> {/* Button to navigate to comments page with selected movie*/}
             </li>
           ))}
         </ul>
