@@ -1,0 +1,63 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Align items to the start vertically */
+  flex-direction: column;
+  padding: 20px;
+  background-color: #f5f5f5; /* Light grey background color */
+}
+
+.list {
+  list-style-type: none;
+  padding: 0;
+  width: 100%;
+  max-width: 800px; /* Maximum width for the list */
+}
+
+.listItem {
+  margin-bottom: 10px;
+}
+
+.movieCard {
+  background-color: #e8f4ea;  /* Light green background color */
+  color: #333; /* Dark grey text color */
+  padding: 10px 15px;
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for elevation */
+  transition: transform 0.2s; /* Smooth scaling transition on hover */
+  cursor: pointer; /* Pointer cursor on hover */
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* Hover effect for the movie card */
+.movieCard:hover {
+  transform: scale(1.05);  /* Slightly scale up the card */
+}
+
+.title {
+  font-size: 1.3em;
+  margin: 0 0 5px 0;
+}
+
+.rating,
+.boxOffice {
+  font-size: 1em;
+  margin: 0 0 5px 0;
+}
+
+.button {
+  background-color: #1c1c1c;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 14px;
+  cursor: pointer;  /* Pointer cursor on hover */
+  border-radius: 5px;
+  align-self: flex-start;
+  margin-top: 8px;
+}
