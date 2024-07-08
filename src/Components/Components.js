@@ -1,12 +1,18 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
-import Main from "./Main/Main";
-import Comments from "./Comments/Comments";
-import Footer from "./Footer/Footer";
+import { BrowserRouter as Router, Route, Routes, Link, Navigate } from "react-router-dom"; // add Navigate
 
 import AuthModule from "./Auth/Auth.js";
 import AuthRegister from "./Auth/AuthRegister";
 import AuthLogin from "./Auth/AuthLogin";
+//INTEGRATION NOTE^^^ I'm borrowing the placeholder names from the Feature 5 kickoff -- we may need to tweak these once we have our own Auth services if they follow different naming conventions
+
+import ProtectedRoute from "./ProtectedRoute/ProtectedRoute.js";
+//importing the "ProtectedRoute" component created for Feature 5
+
+import Main from "./Main/Main";
+import Comments from "./Comments/Comments";
+//Comments will be our "protected" Component
+import Footer from "./Footer/Footer";
 
 const Components = () => {
   return (
@@ -15,22 +21,28 @@ const Components = () => {
         <nav>
           <ul>
             <li>
-              <Link to="/">Main</Link> {/* Link to navigate to the Main component */}
+              <Link to="/">See movie list.</Link> {/* Link to navigate to the Main component */}
             </li>
             <li>
-              <Link to="/comments">Comments</Link> {/* Link to navigate to the Comments component */}
+              <Link to="/comments">See movie comments</Link> {/* Link to navigate to the Comments component */}
             </li>
             <li>
-              <Link to="/auth">Test Auth</Link> {/* Link to navigate to the TestAuth component */}
+              <Link to="/auth/login">Login to your user account.</Link> {/* Link to navigate to the AuthLogin component */}
+            </li>
+            <li>
+              <Link to="/auth/register">Register new user account.</Link> {/* Link to navigate to the AuthRegister component */}
             </li>
           </ul>
         </nav>
         <Routes>
+          <Route path="/auth" element={<AuthModule />} />
+          <Route path="/auth/register" element={<AuthRegister />} />
+          <Route path="/auth/login" element={<AuthLogin />} />
           <Route path="/" element={<Main />} /> {/* Route for the Main component */}
-          <Route path="/comments" element={<Comments />} /> {/* Route for the Comments component */}
-          <Route path="/auth" element={<AuthModule />} /> {/* Route for the Auth component */}
-          <Route path="/auth/register" element={<AuthRegister />} /> {/* Route for the AuthRegister component */}
-          <Route path="/auth/login" element={<AuthLogin />} /> {/* Route for the AuthLogin component */}
+          <Route 
+            path="/comments" 
+            element={<ProtectedRoute path="/comments" element={Comments}/>} /> {/* Route for the Comments component */}
+          <Route path="*" element={<Navigate to="/auth" replace />} /> {/* Set /auth as a default path */}
         </Routes>
         <Footer /> {/* Footer component, displayed on all pages */}
       </div>
