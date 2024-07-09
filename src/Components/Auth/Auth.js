@@ -20,7 +20,6 @@ const AuthModule = () => {
         <button>Register</button>
       </Link>
       <br />
-      <br />
       <Link to="/auth/login">
         <button>Login</button>
       </Link>

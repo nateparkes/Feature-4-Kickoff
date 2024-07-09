@@ -4,8 +4,6 @@ import { BrowserRouter as Router, Route, Routes, Link, Navigate } from "react-ro
 import AuthModule from "./Auth/Auth.js";
 import AuthRegister from "./Auth/AuthRegister";
 import AuthLogin from "./Auth/AuthLogin";
-//INTEGRATION NOTE^^^ I'm borrowing the placeholder names from the Feature 5 kickoff -- we may need to tweak these once we have our own Auth services if they follow different naming conventions
-
 import ProtectedRoute from "./ProtectedRoute/ProtectedRoute.js";
 //importing the "ProtectedRoute" component created for Feature 5
 
@@ -21,17 +19,18 @@ const Components = () => {
         <nav>
           <ul>
             <li>
-              <Link to="/">See movie list.</Link> {/* Link to navigate to the Main component */}
+              <Link to="/">See movie list</Link> {/* Link to navigate to the Main component */}
             </li>
             <li>
               <Link to="/comments">See movie comments</Link> {/* Link to navigate to the Comments component */}
             </li>
             <li>
-              <Link to="/auth/login">Login to your user account.</Link> {/* Link to navigate to the AuthLogin component */}
+              <Link to="/auth/login">Login to your user account</Link> {/* Link to navigate to the AuthLogin component */}
             </li>
             <li>
-              <Link to="/auth/register">Register new user account.</Link> {/* Link to navigate to the AuthRegister component */}
+              <Link to="/auth/register">Register new user account</Link> {/* Link to navigate to the AuthRegister component */}
             </li>
+            {/* Future feature ideas: add an element that shows an authenticated user their username in the nav bar, add a "log-out" capability*/}
           </ul>
         </nav>
         <Routes>

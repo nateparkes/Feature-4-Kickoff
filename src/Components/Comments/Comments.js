@@ -14,6 +14,8 @@ const Comments = () => {
   const [comment, setComment] = useState("");// State to hold the comment input value
   const [movies, setMovies] = useState([]);// State to hold the list of all movies
 
+  //future feature idea: automatically provide username as {name} value
+
   // Fetch comments on component mount if selectedMovie is defined
   useEffect(() => {
     if (selectedMovie) {

@@ -10,7 +10,7 @@ export default function FooterChild({
 
   return (
       <fieldset id="commentFieldset">
-        <legend>Leave a comment:</legend>
+        <legend>Cast your vote:</legend>
         <form id="commentForm" onSubmit={handleCommentSubmit}>
           <label htmlFor="commentText">What's your favorite movie from 1999?</label><br />
           <input
@@ -20,7 +20,7 @@ export default function FooterChild({
             value={commentText}
             onChange={handleInputChange}
             required
-          /><br /><br />
+          /><br />
           <button type="submit">Submit</button><br />
         </form>
       </fieldset>
