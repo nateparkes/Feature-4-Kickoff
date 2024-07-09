@@ -21,6 +21,7 @@ import FooterList from "./FooterList";
    //
    return (
        <div className="App">
+        <hr/>
        <FooterField
          handleCommentSubmit={handleCommentSubmit}
          commentText={commentText}
