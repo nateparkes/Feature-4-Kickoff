@@ -3,6 +3,7 @@ import { addCommentForMovie } from "../../Services/AddComment";
 import getComments from "../../Services/GetComments";
 import { getAllMovies } from "../../Services/GetMoviesService";
 import { useLocation, useNavigate } from "react-router-dom";
+import Parse from 'parse'; // needed this to get the logged in user's username
 
 const Comments = () => {
   const location = useLocation(); //to access the current location and its state
@@ -14,7 +15,15 @@ const Comments = () => {
   const [comment, setComment] = useState("");// State to hold the comment input value
   const [movies, setMovies] = useState([]);// State to hold the list of all movies
 
-  //future feature idea: automatically provide username as {name} value
+  //New for feature 6; let's set the name userstate to match the currently logged in user
+  useEffect(() => {
+    const currentUser = Parse.User.current();
+    // we declare new variable "currentUser" and set it's value to the currently logged in user (using Parse function)
+    if (currentUser) { //check to see if currentUser was successfully set (Parse.User.current() was not false or null)
+      setName(currentUser.get('username'));
+    }
+  },[]);
+
 
   // Fetch comments on component mount if selectedMovie is defined
   useEffect(() => {
@@ -37,7 +46,7 @@ const Comments = () => {
     if (selectedMovie) { // Add a comment for the selected movie
       addCommentForMovie(selectedMovie.id, name, comment).then((newComment) => {
         setComments([...comments, newComment]); // Update the comments state with the new comment
-        setName(""); // Reset the name input
+        // setName(""); // Reset the name input // Deleted for Feature 6 becuase the name should stay as username
         setComment("");// Reset the comment input
       });
     }
@@ -66,12 +75,14 @@ const Comments = () => {
     <div>
       <h2>Comments for {selectedMovie.title}</h2> {/* Header displaying the selected movie's title */}
       <form onSubmit={handleAddComment}>
+        {/* eliminated this input for Feature 6
         <input
           type="text"
           placeholder="Your name"
           value={name}
           onChange={(e) => setName(e.target.value)} // Update the name state on input change
-        />
+        /> */}
+        <h2></h2>
         <input
           type="text"
           placeholder="Your comment"
