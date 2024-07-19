@@ -2,32 +2,37 @@ import { useState, useEffect } from "react";
 import FooterField from "./FooterField";
 import FooterList from "./FooterList";
 import Parse from 'parse';
-import { getRecommendations } from '../../Services/RecommendationService';
+import { getRecommendations, getPopularMovies } from '../../Services/RecommendationService';
 
 export default function Footer() {
-  // State to hold the list of comments
   const [comments, setComments] = useState([]);
-  // State to hold the text of a new comment being typed
   const [commentText, setCommentText] = useState("");
-  // State to hold the list of recommended movies
-  const [recommendations, setRecommendations] = useState([]);
-  // Get the current logged-in user
+  const [recommendation, setRecommendation] = useState(null);
   const currentUser = Parse.User.current();
 
-  // Function to handle the submission of a new comment
   const handleCommentSubmit = (event) => {
-    event.preventDefault(); // Prevent default behavior of the submit button
-    const newComment = { text: commentText, date: new Date().toISOString() }; // Create a new comment object
-    setComments([...comments, newComment]); // Add new comment to the list of comments
-    setCommentText(""); // Clear the comment input field
+    event.preventDefault();
+    const newComment = { text: commentText, date: new Date().toISOString() };
+    setComments([...comments, newComment]);
+    setCommentText("");
   };
 
-  // useEffect hook to fetch recommendations when the component mounts and when the current user changes
   useEffect(() => {
     if (currentUser) {
-      // Fetch recommendations for the current user
-      getRecommendations(currentUser.id).then((movies) => {
-        setRecommendations(movies); // Update the recommendations state
+      console.log(`Fetching recommendation for current user: ${currentUser.id}`);
+      getRecommendations(currentUser.id).then((movie) => {
+        console.log(`Movie fetched:`, movie);
+        setRecommendation(movie);
+      }).catch(error => {
+        console.error(`Error fetching recommendation:`, error);
+      });
+    } else {
+      console.log(`Fetching popular movie for guest user`);
+      getPopularMovies().then((movies) => {
+        console.log(`Popular movies fetched:`, movies);
+        setRecommendation(movies.length > 0 ? movies[0] : null);
+      }).catch(error => {
+        console.error(`Error fetching popular movies:`, error);
       });
     }
   }, [currentUser]);
@@ -35,31 +40,21 @@ export default function Footer() {
   return (
     <div className="App">
       <hr />
-      {/* Component to handle the comment submission form */}
       <FooterField
         handleCommentSubmit={handleCommentSubmit}
         commentText={commentText}
         setCommentText={setCommentText}
       />
-      {/* Component to display the list of comments */}
       <FooterList comments={comments} />
-      {/* Display the list of recommended movies if there are any */}
-      {recommendations.length > 0 && (
+      {recommendation && (
         <div>
-          <h3>Movies You May Like</h3>
-          <ul>
-            {recommendations.map((movie) => (
-              <li key={movie.id}>
-                {/* Button to open the Amazon link for the recommended movie */}
-                <button
-                  onClick={() => window.open(movie.get('amazon_link'), '_blank', 'noopener,noreferrer')}
-                  className="button"
-                >
-                  {movie.get('title')} {/* Display the movie title on the button */}
-                </button>
-              </li>
-            ))}
-          </ul>
+          <h3>{currentUser ? `${currentUser.get('firstName')}, Movie You May Like` : "Movie You May Like"}</h3>
+          <button
+            onClick={() => window.open(recommendation.get('amazon_link'), '_blank', 'noopener,noreferrer')}
+            className="button"
+          >
+            {recommendation.get('title')}
+          </button>
         </div>
       )}
     </div>
