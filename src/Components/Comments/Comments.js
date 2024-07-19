@@ -134,7 +134,20 @@ const Comments = () => {
   };
 
   if (!selectedMovie) {
-    return <div>Select a movie to see comments.</div>;
+    return (
+      <div>
+        <h2>Select a movie to view comments</h2>
+        <ul>
+          {movies.map((movie) => (
+            <li key={movie.id}>
+              <button onClick={() => navigate("/comments", { state: { selectedMovie: { id: movie.id, title: movie.get("title") } } })}>
+                {movie.get("title")}
+              </button> {/* Button to navigate to comments page with selected movie*/}
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
   }
 
   // If a movie is selected, render the comments section for that movie
