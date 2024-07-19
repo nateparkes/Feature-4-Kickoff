@@ -1,24 +1,36 @@
 import Parse from 'parse';
 
-// Function to like a comment
-export const likeComment = async (commentId) => {
-  // Define the Comment class
+// Function to toggle like for a comment
+export const likeComment = async (commentId, userId) => {
   const Comment = Parse.Object.extend("Comment");
-  // Create a query to search for the comment by its ID
-  const query = new Parse.Query(Comment);
+  const Like = Parse.Object.extend("Like");
+  const commentQuery = new Parse.Query(Comment);
+  const likeQuery = new Parse.Query(Like);
 
   try {
-    // Fetch the comment object by its ID
-    const comment = await query.get(commentId);
-    // Increment the "likes" count of the comment
-    comment.increment("likes");
-    // Save the updated comment object to the database
+    const comment = await commentQuery.get(commentId);
+    likeQuery.equalTo("comment", comment);
+    likeQuery.equalTo("user", Parse.User.createWithoutData(userId));
+
+    const existingLike = await likeQuery.first();
+
+    if (existingLike) {
+      // If the user has already liked the comment, remove the like
+      await existingLike.destroy();
+      comment.increment("likes", -1);
+    } else {
+      // If the user has not liked the comment, add a like
+      const newLike = new Like();
+      newLike.set("comment", comment);
+      newLike.set("user", Parse.User.createWithoutData(userId));
+      await newLike.save();
+      comment.increment("likes");
+    }
+
     const updatedComment = await comment.save();
-    // Return the updated comment object
     return updatedComment;
   } catch (error) {
-    // Log any errors that occur during the process
-    console.error("Error liking comment:", error);
+    console.error("Error toggling like:", error);
     throw error;
   }
 };
