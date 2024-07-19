@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { addCommentForMovie } from "../../Services/AddComment";
 import getComments from "../../Services/GetComments";
 import { getAllMovies } from "../../Services/GetMoviesService";
-import { likeComment } from "../../Services/LikeComment";  // Import the like comment service
+import { likeComment } from "../../Services/LikeComment"; // Import the like comment service
 import { replyToComment } from "../../Services/ReplyComment"; // Import the reply comment service
 import { useLocation, useNavigate } from "react-router-dom";
 import Parse from 'parse'; // needed this to get the logged in user's username
@@ -29,6 +29,7 @@ const Comments = () => {
     const currentUser = Parse.User.current();
     if (currentUser) {
       setName(currentUser.get('firstName'));
+      loadUserLikes(currentUser.id);
     }
   }, []);
 
@@ -38,6 +39,7 @@ const Comments = () => {
       // Fetch comments for the selected movie
       getComments(selectedMovie.id).then((comments) => {
         setComments(comments); // Update the comments state with the fetched comments
+        comments.forEach(comment => fetchReplies(comment.id));
       });
     } else {
       // Fetch all movies if no movie is selected
@@ -46,6 +48,21 @@ const Comments = () => {
       });
     }
   }, [selectedMovie]);
+
+  // Load user likes for the current user
+  const loadUserLikes = async (userId) => {
+    const Like = Parse.Object.extend("Like");
+    const query = new Parse.Query(Like);
+    query.equalTo("user", Parse.User.createWithoutData(userId));
+    query.include("comment");
+
+    try {
+      const results = await query.find();
+      setLikedComments(results.map(like => like.get("comment").id));
+    } catch (error) {
+      console.error("Error loading user likes:", error);
+    }
+  };
 
   // Function to fetch replies for a comment
   const fetchReplies = async (commentId) => {
@@ -62,8 +79,11 @@ const Comments = () => {
 
   // Function to handle the like action
   const handleLike = async (commentId) => {
+    const currentUser = Parse.User.current();
+    if (!currentUser) return;
+
     try {
-      const updatedComment = await likeComment(commentId);
+      const updatedComment = await likeComment(commentId, currentUser.id);
       setComments((prevComments) =>
         prevComments.map((comment) =>
           comment.id === updatedComment.id ? updatedComment : comment
@@ -108,6 +128,11 @@ const Comments = () => {
     }
   };
 
+  const handleToggleReply = (comment) => {
+    setReplyingTo(replyingTo?.id === comment.id ? null : comment);
+    setReply(""); // Clear the reply input field when selecting a new comment to reply to
+  };
+
   if (!selectedMovie) {
     return <div>Select a movie to see comments.</div>;
   }
@@ -131,14 +156,24 @@ const Comments = () => {
           <li key={index}>
             <p>{comment.get("body")}</p>
             <small>{comment.get("author")}</small>
-            <p>Likes: {comment.get("likes") || 0}</p>
             <button onClick={() => handleLike(comment.id)}>
               <FontAwesomeIcon icon={likedComments.includes(comment.id) ? faSolidHeart : faRegularHeart} />
+              {comment.get("likes") || 0}
             </button>
-            <button onClick={() => {
-              setReplyingTo(comment);
-              fetchReplies(comment.id);
-            }}>Reply</button>
+            <button onClick={() => handleToggleReply(comment)}>
+              Reply
+            </button>
+            {replyingTo && replyingTo.id === comment.id && (
+              <form onSubmit={handleReply}>
+                <input
+                  type="text"
+                  placeholder="Your reply"
+                  value={reply}
+                  onChange={(e) => setReply(e.target.value)} // Update the reply state on input change
+                />
+                <button type="submit">Add Reply</button>
+              </form>
+            )}
             <ul>
               {replies[comment.id]?.map((reply) => (
                 <li key={reply.id}>
@@ -150,18 +185,6 @@ const Comments = () => {
           </li>
         ))}
       </ul>
-      {replyingTo && (
-        <form onSubmit={handleReply}>
-          <h3>Replying to {replyingTo.get("body")}</h3>
-          <input
-            type="text"
-            placeholder="Your reply"
-            value={reply}
-            onChange={(e) => setReply(e.target.value)} // Update the reply state on input change
-          />
-          <button type="submit">Add Reply</button>
-        </form>
-      )}
     </div>
   );
 };
