@@ -9,8 +9,9 @@ import ProtectedRoute from "./ProtectedRoute/ProtectedRoute.js";
 
 import Main from "./Main/Main";
 import Comments from "./Comments/Comments";
-//Comments will be our "protected" Component
+//Comments and Watchlist will be our "protected" Components
 import Footer from "./Footer/Footer";
+import WatchlistDisplay from "./Watchlist/WatchlistDisplay.js";
 
 const Components = () => {
   return (
@@ -23,6 +24,9 @@ const Components = () => {
             </li>
             <li>
               <Link to="/comments">See movie comments</Link> {/* Link to navigate to the Comments component */}
+            </li>
+            <li>
+              <Link to="/watchlist">See your Watchlist</Link> {/* Link to navigate to the WatchlistDisplay component */}
             </li>
             <li>
               <Link to="/auth/login">Login to your user account</Link> {/* Link to navigate to the AuthLogin component */}
@@ -41,6 +45,9 @@ const Components = () => {
           <Route 
             path="/comments" 
             element={<ProtectedRoute path="/comments" element={Comments}/>} /> {/* Route for the Comments component */}
+          <Route 
+            path="/watchlist" 
+            element={<ProtectedRoute path="/watchlist" element={WatchlistDisplay}/>} />
           <Route path="*" element={<Navigate to="/auth" replace />} /> {/* Set /auth as a default path */}
         </Routes>
         <Footer /> {/* Footer component, displayed on all pages */}

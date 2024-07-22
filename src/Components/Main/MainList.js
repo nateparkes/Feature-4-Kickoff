@@ -1,8 +1,9 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import './MainList.css';
+import WatchlistCheckbox from "./WatchlistCheckbox";
 
-const MainList = ({ movies, onSelect }) => {
+const MainList = ({ movies, onSelect, onCheckboxChange, watchlist }) => {
   const navigate = useNavigate(); // for programmatic navigation
 
   return (
@@ -17,6 +18,11 @@ const MainList = ({ movies, onSelect }) => {
                 <p className="boxOffice">${movie.get("total_domestic_box_office").toLocaleString()} domestic box office total</p>
                 <a href={movie.get("amazon_link")} className="button" target="_blank" rel="noopener noreferrer">Watch now</a>
                 <button className="button" onClick={() => navigate("/comments", { state: { selectedMovie: { id: movie.id, title: movie.get("title") } } })}>View Comments</button>
+                <WatchlistCheckbox // adding Watchlist checkbox, will be null if user isn't logged in
+                  movie={movie}
+                  onCheckboxChange={onCheckboxChange}
+                  watchlist={watchlist}
+                />
               </div>{/*  Button to navigate to comments page */}
             </li>
           ))}

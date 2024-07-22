@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import { getAllMovies } from "../../Services/GetMoviesService";
 import MainList from "./MainList";
 import { useNavigate } from "react-router-dom";
+import { fetchWatchlist, toggleWatchlistStatus } from "../../Services/WatchlistService";
 
 const Main = () => {
 //manage the state of movies, selectedMovie, and sortKey
   const [movies, setMovies] = useState([]); //State to hold the list of movies
   const [selectedMovie, setSelectedMovie] = useState(null); //// State to hold the currently selected movie
   const [sortKey, setSortKey] = useState("rotten_tomatoes_rating"); // State to hold the current sorting key
+  const [watchlist, setWatchlist] = useState(new Map()); //creates empty Map to hold watchlist data
   const navigate = useNavigate(); // for programmatic navigation
 
   // Fetch movies on component mount
@@ -15,6 +17,7 @@ const Main = () => {
     getAllMovies().then((movies) => {
       setMovies(movies);
     });
+    fetchWatchlist();
   }, []);
 
   // Handle movie selection
@@ -42,6 +45,13 @@ const Main = () => {
     setMovies(sortedMovies);// Update the movies state with the sorted movies
   };
 
+  // Handle checkbox change
+  const handleCheckboxChange = async (movie, checked) => { //declare an aysnc function that accepts "movie" and "checked" (boolean) as arguments
+    await toggleWatchlistStatus(movie,checked); //await the watchlist data service
+    setWatchlist(new Map(watchlist.set(movie.id,checked))); //update the watchlist state with a Map of the results
+  };
+ 
+
   return (
     <div>
       <h2>Movies from 1999</h2>
@@ -52,7 +62,12 @@ const Main = () => {
           <option value="total_domestic_box_office">Box Office</option>
         </select>
       </label>
-      <MainList movies={movies} onSelect={handleMovieSelect} /> {/* Render the MainList component with movies and onSelect handler */}
+      <MainList
+        movies={movies}
+        onSelect={handleMovieSelect} 
+        onCheckboxChange={handleCheckboxChange}
+        watchlist={watchlist}
+        /> {/* Render the MainList component with movies and onSelect handler */}
       {selectedMovie && (
         <div>
           <button onClick={() => navigate("/comments", { state: { selectedMovie } })}>

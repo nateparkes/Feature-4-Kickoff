@@ -26,7 +26,7 @@ const ProtectedRoute = ({ element: Component, ...rest }) => {
     } else {
         return (
             <div>
-              <p>You haven't supplied recognized user credentials. To view or add comments, you must be logged in to your registered user account.</p>
+              <p>You haven't supplied recognized user credentials. To view comments or your Watchlist, you must be logged in to your registered user account.</p>
               <button onClick={notAuthHandler}>Login/register</button><br/>
               <button onClick={mainReturnHandler}>Return to movie list</button>
             </div>
