@@ -1,14 +1,21 @@
 import Parse from 'parse';
+import { fetchWatchlist } from '../Services/WatchlistService';
+import { fetchAlreadyWatchedList } from '../Services/AlreadyWatchedService';
 
 // Main function to get movie recommendations for a user
 export const getRecommendations = async (userId) => {
   try {
     console.log(`Fetching recommendations for user: ${userId}`);
     const userMovies = await getUserMovies(userId);
+    const watchlist = await fetchWatchlist();
+    const alreadyWatchedList = await fetchAlreadyWatchedList();
     const popularMovies = await getComprehensiveRankedMovies();
 
-    // Filter out the movies the user has already commented on or liked
-    const recommendedMovies = popularMovies.filter(movie => !userMovies.includes(movie.id));
+    // Combine watchlist and already watched list
+    const excludedMovies = new Set([...userMovies, ...Array.from(watchlist.keys()), ...alreadyWatchedList]);
+
+    // Filter out the movies the user has already commented on, liked, is in watchlist, or already watched
+    const recommendedMovies = popularMovies.filter(movie => !excludedMovies.has(movie.id));
 
     console.log(`Recommendations fetched:`, recommendedMovies);
     return recommendedMovies.length > 0 ? recommendedMovies[0] : null;
