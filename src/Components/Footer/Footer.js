@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import FooterField from "./FooterField";
 import FooterList from "./FooterList";
 import Parse from 'parse';
-import { getRecommendations, getPopularMovies } from '../../Services/RecommendationService';
+import { getRecommendations, getComprehensiveRankedMovies } from '../../Services/RecommendationService';
 
 export default function Footer() {
   const [comments, setComments] = useState([]);
@@ -28,7 +28,7 @@ export default function Footer() {
       });
     } else {
       console.log(`Fetching popular movie for guest user`);
-      getPopularMovies().then((movies) => {
+      getComprehensiveRankedMovies().then((movies) => {
         console.log(`Popular movies fetched:`, movies);
         setRecommendation(movies.length > 0 ? movies[0] : null);
       }).catch(error => {
