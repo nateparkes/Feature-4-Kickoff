@@ -9,8 +9,10 @@ import ProtectedRoute from "./ProtectedRoute/ProtectedRoute.js";
 
 import Main from "./Main/Main";
 import Comments from "./Comments/Comments";
-//Comments will be our "protected" Component
+//Comments and Watchlist will be our "protected" Components
 import Footer from "./Footer/Footer";
+import WatchlistDisplay from "./Watchlist/WatchlistDisplay.js";
+import { Button } from "@mui/material";
 
 const Components = () => {
   return (
@@ -19,16 +21,44 @@ const Components = () => {
         <nav>
           <ul>
             <li>
-              <Link to="/">See movie list</Link> {/* Link to navigate to the Main component */}
+              <Button
+                variant="contained"
+                component={Link}
+                to="/">
+                See movie list
+                </Button>
             </li>
             <li>
-              <Link to="/comments">See movie comments</Link> {/* Link to navigate to the Comments component */}
+            <Button
+                variant="contained"
+                component={Link}
+                to="/comments">
+                See movie Comments
+            </Button>
             </li>
             <li>
-              <Link to="/auth/login">Login to your user account</Link> {/* Link to navigate to the AuthLogin component */}
+            <Button
+                variant="contained"
+                component={Link}
+                to="/watchlist">
+                See your Watchlist
+            </Button>
             </li>
             <li>
-              <Link to="/auth/register">Register new user account</Link> {/* Link to navigate to the AuthRegister component */}
+            <Button
+                variant="contained"
+                component={Link}
+                to="/auth/login">
+                Login
+            </Button>
+            </li>
+            <li>
+            <Button
+                variant="contained"
+                component={Link}
+                to="/auth/register">
+                Register
+              </Button>
             </li>
             {/* Future feature ideas: add an element that shows an authenticated user their username in the nav bar, add a "log-out" capability*/}
           </ul>
@@ -41,6 +71,9 @@ const Components = () => {
           <Route 
             path="/comments" 
             element={<ProtectedRoute path="/comments" element={Comments}/>} /> {/* Route for the Comments component */}
+          <Route 
+            path="/watchlist" 
+            element={<ProtectedRoute path="/watchlist" element={WatchlistDisplay}/>} />
           <Route path="*" element={<Navigate to="/auth" replace />} /> {/* Set /auth as a default path */}
         </Routes>
         <Footer /> {/* Footer component, displayed on all pages */}
