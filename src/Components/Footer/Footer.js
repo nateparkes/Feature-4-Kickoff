@@ -40,12 +40,6 @@ export default function Footer() {
   return (
     <div className="App">
       <hr />
-      <FooterField
-        handleCommentSubmit={handleCommentSubmit}
-        commentText={commentText}
-        setCommentText={setCommentText}
-      />
-      <FooterList comments={comments} />
       {recommendation && (
         <div>
           <h3>{currentUser ? `${currentUser.get('firstName')}, Movie You May Like` : "Movie You May Like"}</h3>
@@ -57,6 +51,13 @@ export default function Footer() {
           </button>
         </div>
       )}
+
+      <FooterField
+        handleCommentSubmit={handleCommentSubmit}
+        commentText={commentText}
+        setCommentText={setCommentText}
+      />
+      <FooterList comments={comments} />
     </div>
   );
 }
