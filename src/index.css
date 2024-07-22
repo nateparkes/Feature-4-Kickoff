@@ -15,7 +15,7 @@ code {
 nav {
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: flex-start;
   padding: 0;
   flex-wrap: wrap;
 }
@@ -26,6 +26,12 @@ nav ul {
   flex-wrap: wrap;
 }
 
+nav li {
+  padding: 5px;
+  margin: 3px;
+}
+
+/*
 nav li {
   margin-right: 15px;
   color: white;
@@ -47,3 +53,5 @@ nav a:hover, nav a:focus {
 button, input, select {
   margin: 5px;
 }
+
+*/
