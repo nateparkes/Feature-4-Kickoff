@@ -4,7 +4,7 @@
   align-items: flex-start; /* Align items to the start vertically */
   flex-direction: column;
   padding: 20px;
-  background-color: #f5f5f5; /* Light grey background color */
+  /*  background-color: #f5f5f5; Light grey background color */
 }
 
 .list {
@@ -19,7 +19,7 @@
 }
 
 .movieCard {
-  background-color: #e8f4ea;  /* Light green background color */
+  background-color: rgb(222, 242, 255);
   color: #333; /* Dark grey text color */
   padding: 10px 15px;
   border-radius: 8px; /* Rounded corners */
@@ -49,8 +49,8 @@
 }
 
 .button {
-  background-color: #1c1c1c;
-  color: white;
+  /* background-color: #1c1c1c; */
+  /* color: white;*/
   border: none;
   padding: 8px 12px;
   text-align: center;
