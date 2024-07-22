@@ -3,6 +3,7 @@ import FooterField from "./FooterField";
 import FooterList from "./FooterList";
 import Parse from 'parse';
 import { getRecommendations, getComprehensiveRankedMovies } from '../../Services/RecommendationService';
+import { Button } from '@mui/material';
 
 export default function Footer() {
   const [comments, setComments] = useState([]);
@@ -41,14 +42,17 @@ export default function Footer() {
     <div className="App">
       <hr />
       {recommendation && (
-        <div>
-          <h3>Hi {currentUser ? `${currentUser.get('firstName')}, a recommended movie you may like` : "Movie You May Like"}</h3>
-          <button
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <h3 style={{ margin: 0 }}>
+            {currentUser ? `Hi ${currentUser.get('firstName')}, a recommended movie you may like:` : "Hi, a recommended movie you may like:"}
+          </h3>
+          <Button
             onClick={() => window.open(recommendation.get('amazon_link'), '_blank', 'noopener,noreferrer')}
-            className="button"
+            variant="contained"
+            style={{ backgroundColor: '#ADD8E6', color: '#000000', textTransform: 'none' }} // Light blue theme and prevent text transform
           >
             {recommendation.get('title')}
-          </button>
+          </Button>
         </div>
       )}
 
