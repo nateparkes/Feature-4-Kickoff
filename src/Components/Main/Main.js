@@ -3,6 +3,7 @@ import { getAllMovies } from "../../Services/GetMoviesService";
 import MainList from "./MainList";
 import { useNavigate } from "react-router-dom";
 import { fetchWatchlist, toggleWatchlistStatus } from "../../Services/WatchlistService";
+import { Button, Select, MenuItem, InputLabel, FormControl } from "@mui/material";
 
 const Main = () => {
 //manage the state of movies, selectedMovie, and sortKey
@@ -54,14 +55,20 @@ const Main = () => {
 
   return (
     <div>
-      <h2>Movies from 1999</h2>
-      <label>
-        Sort by:
-        <select value={sortKey} onChange={handleSortChange}> {/* Dropdown to select sorting key */}
-          <option value="rotten_tomatoes_rating">Rating</option>
-          <option value="total_domestic_box_office">Box Office</option>
-        </select>
-      </label>
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-start' }}>
+        <h2 style={{ margin: 10 }}>Movies from 1999</h2>
+        <FormControl variant="outlined" sx={{ minWidth: 120, marginBottom: 2 }}>
+          <InputLabel>Sort by</InputLabel>
+          <Select
+            value={sortKey}
+            onChange={handleSortChange}
+            label="Sort by"
+          >
+            <MenuItem value="rotten_tomatoes_rating">Rating</MenuItem>
+            <MenuItem value="total_domestic_box_office">Box Office</MenuItem>
+          </Select>
+        </FormControl>
+      </div>
       <MainList
         movies={movies}
         onSelect={handleMovieSelect} 
@@ -70,9 +77,12 @@ const Main = () => {
         /> {/* Render the MainList component with movies and onSelect handler */}
       {selectedMovie && (
         <div>
-          <button onClick={() => navigate("/comments", { state: { selectedMovie } })}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => navigate("/comments", { state: { selectedMovie } })}>
             View All Comments
-          </button> {/* Button to navigate to the comments page with the selected movie data */}
+          </Button> {/* Button to navigate to the comments page with the selected movie data */}
         </div>
       )}
     </div>

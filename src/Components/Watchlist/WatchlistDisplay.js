@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Parse from "parse";
 import { fetchWatchlist , toggleWatchlistStatus } from "../../Services/WatchlistService";
 import { fetchAlreadyWatchedList, toggledAlreadyWatched } from "../../Services/AlreadyWatchedService";
+import { Button, Checkbox, FormControlLabel } from "@mui/material";
 
 const WatchlistDisplay = () => {
     //create a state for the movies, the user's watchlist, and the already watched movies
@@ -62,23 +63,36 @@ const handleAlreadyWatchedCheckboxChange = async (movie, watched) => {//declare 
             <li key={movie.id} className="listItem">
               <div className="movieCard">
                 <h3 className="title">{movie.get("title")}</h3>
-                <a href={movie.get("amazon_link")} className="button" target="_blank" rel="noopener noreferrer">Watch now</a>
-                <label>
-                <input
-                  type="checkbox"
-                  checked={watchlist.get(movie.id) || false}
-                  onChange={(e) => handleCheckboxChange(movie, e.target.checked)}
+                <Button 
+                  className="button"
+                  variant="contained"
+                  color="primary"
+                  component="a"
+                  href={movie.get("amazon_link")}
+                  target="_blank"
+                  rel="noopener noreferrer">
+                    Watch now
+                </Button>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={watchlist.get(movie.id) || false}
+                      onChange={(e) => handleCheckboxChange(movie, e.target.checked)}
+                      color="primary"
+                    />
+                  }
+                  label="Keep in Watchlist"
                 />
-                Keep in Watchlist
-                </label>
-                <label>
-                  <input
-                    type="checkbox"
+                <FormControlLabel
+                  control={
+                    <Checkbox   
                     checked={alreadyWatchedList.get(movie.id) || false}
                     onChange={(e) => handleAlreadyWatchedCheckboxChange(movie, e.target.checked)}
+                    color="primary"
                   />
-                  I've watched this
-                </label>
+                  }
+                  label="I've watched this"
+                />
               </div>
             </li>
           ))}
@@ -93,15 +107,26 @@ const handleAlreadyWatchedCheckboxChange = async (movie, watched) => {//declare 
             <li key={movie.id} className="listItem">
               <div className="movieCard">
                 <h3 className="title">{movie.get("title")}</h3>
-                <label>
-                                    <input
-                                        type="checkbox"
-                                        checked={alreadyWatchedList.get(movie.id) || false}
-                                        onChange={(e) => handleAlreadyWatchedCheckboxChange(movie, e.target.checked)}
-                                    />
-                                    I've watched this
-                                </label>
-                <a href={movie.get("amazon_link")} className="button" target="_blank" rel="noopener noreferrer">Watch again</a>
+                <FormControlLabel
+                  control={
+                    <Checkbox   
+                    checked={alreadyWatchedList.get(movie.id) || false}
+                    onChange={(e) => handleAlreadyWatchedCheckboxChange(movie, e.target.checked)}
+                    color="primary"
+                  />
+                  }
+                  label="I've watched this"
+                />
+                                <Button 
+                  className="button"
+                  variant="contained"
+                  color="primary"
+                  component="a"
+                  href={movie.get("amazon_link")}
+                  target="_blank"
+                  rel="noopener noreferrer">
+                    Watch again
+                </Button>
 
               </div>
             </li>
