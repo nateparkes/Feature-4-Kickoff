@@ -42,7 +42,7 @@ export default function Footer() {
       <hr />
       {recommendation && (
         <div>
-          <h3>{currentUser ? `${currentUser.get('firstName')}, Movie You May Like` : "Movie You May Like"}</h3>
+          <h3>{currentUser ? `${currentUser.get('firstName')}, the movie you may like` : "Movie You May Like"}</h3>
           <button
             onClick={() => window.open(recommendation.get('amazon_link'), '_blank', 'noopener,noreferrer')}
             className="button"
