@@ -155,7 +155,6 @@ const Comments = () => {
     <div>
       <h2>Comments for {selectedMovie.title}</h2> {/* Header displaying the selected movie's title */}
       <form onSubmit={handleAddComment}>
-        <h2></h2>
         <input
           type="text"
           placeholder="Your comment"
