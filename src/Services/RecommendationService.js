@@ -5,14 +5,12 @@ export const getRecommendations = async (userId) => {
   try {
     console.log(`Fetching recommendations for user: ${userId}`);
     const userMovies = await getUserMovies(userId);
-    console.log(`User movies: `, userMovies);
-    const popularMovies = await getPopularMovies();
-    console.log(`Popular movies: `, popularMovies);
+    const popularMovies = await getComprehensiveRankedMovies();
 
     // Filter out the movies the user has already commented on or liked
     const recommendedMovies = popularMovies.filter(movie => !userMovies.includes(movie.id));
-    console.log(`Filtered recommendations:`, recommendedMovies);
 
+    console.log(`Recommendations fetched:`, recommendedMovies);
     return recommendedMovies.length > 0 ? recommendedMovies[0] : null;
   } catch (error) {
     console.error(`Error fetching recommendations:`, error);
@@ -44,7 +42,9 @@ const getLikedMovies = async (userId) => {
     query.equalTo('user', Parse.User.createWithoutData(userId));
     query.include('movie');
     const results = await query.find();
-    return results.map(result => result.get('movie'));
+    const likedMovies = results.map(result => result.get('movie'));
+    console.log(`Liked movies for user ${userId}: `, likedMovies);
+    return likedMovies;
   } catch (error) {
     console.error(`Error getting liked movies:`, error);
     return [];
@@ -59,7 +59,9 @@ const getCommentedMovies = async (userId) => {
     query.equalTo('user', Parse.User.createWithoutData(userId));
     query.include('movie');
     const results = await query.find();
-    return results.map(result => result.get('movie'));
+    const commentedMovies = results.map(result => result.get('movie'));
+    console.log(`Commented movies for user ${userId}: `, commentedMovies);
+    return commentedMovies;
   } catch (error) {
     console.error(`Error getting commented movies:`, error);
     return [];
@@ -67,19 +69,57 @@ const getCommentedMovies = async (userId) => {
 };
 
 // Helper function to get popular movies based on box office, likes, comments, and Rotten Tomato rate
-export const getPopularMovies = async () => {
+export const getComprehensiveRankedMovies = async () => {
   try {
     const Movie = Parse.Object.extend('Movie');
     const query = new Parse.Query(Movie);
 
     query.descending('boxOffice');
-    query.addDescending('likes');
-    query.addDescending('comments');
-    query.addDescending('rottenTomatoRate');
+    const boxOfficeResults = await query.find();
 
-    const results = await query.find();
-    console.log(`Popular movies from database: `, results);
-    return results;
+    query.descending('likes');
+    const likesResults = await query.find();
+
+    query.descending('comments');
+    const commentsResults = await query.find();
+
+    query.descending('rottenTomatoRate');
+    const rottenTomatoResults = await query.find();
+
+    const movieRanks = {};
+
+    // Assign ranks based on each criterion
+    boxOfficeResults.forEach((movie, index) => {
+      if (!movieRanks[movie.id]) movieRanks[movie.id] = 0;
+      movieRanks[movie.id] += index + 1;
+    });
+
+    likesResults.forEach((movie, index) => {
+      if (!movieRanks[movie.id]) movieRanks[movie.id] = 0;
+      movieRanks[movie.id] += index + 1;
+    });
+
+    commentsResults.forEach((movie, index) => {
+      if (!movieRanks[movie.id]) movieRanks[movie.id] = 0;
+      movieRanks[movie.id] += index + 1;
+    });
+
+    rottenTomatoResults.forEach((movie, index) => {
+      if (!movieRanks[movie.id]) movieRanks[movie.id] = 0;
+      movieRanks[movie.id] += index + 1;
+    });
+
+    // Sort movies by their total rank
+    const sortedMovieIds = Object.keys(movieRanks).sort((a, b) => movieRanks[a] - movieRanks[b]);
+
+    const sortedMovies = [];
+    for (const id of sortedMovieIds) {
+      const movie = await new Parse.Query(Movie).get(id);
+      sortedMovies.push(movie);
+    }
+
+    console.log(`Popular movies from database: `, sortedMovies);
+    return sortedMovies;
   } catch (error) {
     console.error(`Error getting popular movies:`, error);
     return [];
