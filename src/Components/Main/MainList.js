@@ -17,7 +17,8 @@ const MainList = ({ movies, onSelect, onCheckboxChange, watchlist }) => {
                 <h3 className="title">{movie.get("title")}</h3>
                 <p className="rating">{movie.get("rotten_tomatoes_rating")}% on Rotten Tomatoes</p>
                 <p className="boxOffice">${movie.get("total_domestic_box_office").toLocaleString()} domestic box office total</p>
-                <Button 
+                <div className="buttonContainer">
+                <Button
                   className="button"
                   variant="contained"
                   color="primary"
@@ -28,6 +29,7 @@ const MainList = ({ movies, onSelect, onCheckboxChange, watchlist }) => {
                     Watch now
                 </Button>
                 <Button className="button" variant="contained" onClick={() => navigate("/comments", { state: { selectedMovie: { id: movie.id, title: movie.get("title") } } })}>View Comments</Button>
+                </div>
                 <WatchlistCheckbox // adding Watchlist checkbox, will be null if user isn't logged in
                   movie={movie}
                   onCheckboxChange={onCheckboxChange}

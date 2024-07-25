@@ -1,77 +1,36 @@
 import Parse from 'parse';
-import { fetchWatchlist } from '../Services/WatchlistService';
-import { fetchAlreadyWatchedList } from '../Services/AlreadyWatchedService';
+import { fetchWatchlist } from './WatchlistService';
+import { fetchAlreadyWatchedList } from './AlreadyWatchedService';
+import { fetchLikedMovies } from './LikedMovieListService';
+import { fetchCommentedMovies } from './CommentedMovieListService';
 
 // Main function to get movie recommendations for a user
 export const getRecommendations = async (userId) => {
   try {
     console.log(`Fetching recommendations for user: ${userId}`);
-    const userMovies = await getUserMovies(userId);
+    const likedMovies = await fetchLikedMovies();
+    console.log(`Liked movies:`, likedMovies);
+    const commentedMovies = await fetchCommentedMovies();
+    console.log(`Commented movies:`, commentedMovies);
     const watchlist = await fetchWatchlist();
+    console.log(`Watchlist:`, watchlist);
     const alreadyWatchedList = await fetchAlreadyWatchedList();
+    console.log(`Already watched movies:`, alreadyWatchedList);
     const popularMovies = await getComprehensiveRankedMovies();
+    console.log(`Popular movies:`, popularMovies);
 
     // Combine watchlist and already watched list
-    const excludedMovies = new Set([...userMovies, ...Array.from(watchlist.keys()), ...alreadyWatchedList]);
+    const excludedMovies = new Set([...likedMovies, ...commentedMovies, ...Array.from(watchlist.keys()), ...alreadyWatchedList]);
+    console.log(`Excluded movies:`, excludedMovies);
 
     // Filter out the movies the user has already commented on, liked, is in watchlist, or already watched
     const recommendedMovies = popularMovies.filter(movie => !excludedMovies.has(movie.id));
+    console.log(`Recommended movies:`, recommendedMovies);
 
-    console.log(`Recommendations fetched:`, recommendedMovies);
     return recommendedMovies.length > 0 ? recommendedMovies[0] : null;
   } catch (error) {
     console.error(`Error fetching recommendations:`, error);
     return null;
-  }
-};
-
-// Helper function to get the list of movies a user has interacted with
-const getUserMovies = async (userId) => {
-  try {
-    const likedMovies = await getLikedMovies(userId);
-    const commentedMovies = await getCommentedMovies(userId);
-
-    const allMovies = [...likedMovies, ...commentedMovies];
-    const uniqueMovies = [...new Set(allMovies.map(movie => movie.id))];
-    console.log(`User interacted movies: `, uniqueMovies);
-    return uniqueMovies;
-  } catch (error) {
-    console.error(`Error getting user movies:`, error);
-    return [];
-  }
-};
-
-// Helper function to get the list of movies a user has liked
-const getLikedMovies = async (userId) => {
-  try {
-    const Like = Parse.Object.extend('Like');
-    const query = new Parse.Query(Like);
-    query.equalTo('user', Parse.User.createWithoutData(userId));
-    query.include('movie');
-    const results = await query.find();
-    const likedMovies = results.map(result => result.get('movie'));
-    console.log(`Liked movies for user ${userId}: `, likedMovies);
-    return likedMovies;
-  } catch (error) {
-    console.error(`Error getting liked movies:`, error);
-    return [];
-  }
-};
-
-// Helper function to get the list of movies a user has commented on
-const getCommentedMovies = async (userId) => {
-  try {
-    const Comment = Parse.Object.extend('Comment');
-    const query = new Parse.Query(Comment);
-    query.equalTo('user', Parse.User.createWithoutData(userId));
-    query.include('movie');
-    const results = await query.find();
-    const commentedMovies = results.map(result => result.get('movie'));
-    console.log(`Commented movies for user ${userId}: `, commentedMovies);
-    return commentedMovies;
-  } catch (error) {
-    console.error(`Error getting commented movies:`, error);
-    return [];
   }
 };
 
@@ -83,15 +42,19 @@ export const getComprehensiveRankedMovies = async () => {
 
     query.descending('boxOffice');
     const boxOfficeResults = await query.find();
+    console.log(`Box Office Results:`, boxOfficeResults);
 
     query.descending('likes');
     const likesResults = await query.find();
+    console.log(`Likes Results:`, likesResults);
 
     query.descending('comments');
     const commentsResults = await query.find();
+    console.log(`Comments Results:`, commentsResults);
 
     query.descending('rottenTomatoRate');
     const rottenTomatoResults = await query.find();
+    console.log(`Rotten Tomato Rate Results:`, rottenTomatoResults);
 
     const movieRanks = {};
 
@@ -118,6 +81,7 @@ export const getComprehensiveRankedMovies = async () => {
 
     // Sort movies by their total rank
     const sortedMovieIds = Object.keys(movieRanks).sort((a, b) => movieRanks[a] - movieRanks[b]);
+    console.log(`Sorted Movie IDs:`, sortedMovieIds);
 
     const sortedMovies = [];
     for (const id of sortedMovieIds) {
