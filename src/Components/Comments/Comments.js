@@ -10,7 +10,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as faSolidHeart } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as faRegularHeart } from '@fortawesome/free-regular-svg-icons';
 
-
 const Comments = () => {
   const location = useLocation(); // to access the current location and its state
   const navigate = useNavigate(); // for programmatic navigation
@@ -97,7 +96,6 @@ const Comments = () => {
       );
     } catch (error) {
       console.error("Error liking comment:", error);
-
     }
   };
 
@@ -119,8 +117,13 @@ const Comments = () => {
 
   const handleAddComment = async (event) => {
     event.preventDefault();
+    const currentUser = Parse.User.current();
+    if (!currentUser) {
+      alert("You must be logged in to comment.");
+      return;
+    }
     try {
-      await addCommentForMovie(selectedMovie.id, name, comment);
+      await addCommentForMovie(selectedMovie.id, currentUser.id, comment);
       // Fetch the updated comments after adding a new one
       const updatedComments = await getComments(selectedMovie.id);
       setComments(updatedComments);
@@ -129,6 +132,7 @@ const Comments = () => {
       console.error("Error adding comment:", error);
     }
   };
+
 
   const handleToggleReply = (comment) => {
     setReplyingTo(replyingTo?.id === comment.id ? null : comment);
@@ -170,15 +174,16 @@ const Comments = () => {
           <li key={index}>
             <p>{comment.get("body")}</p>
             <small>{comment.get("author")}</small>
+            <span style={{ marginLeft: '1em' }}></span>
             <button onClick={() => handleLike(comment.id)}>
               <FontAwesomeIcon icon={likedComments.includes(comment.id) ? faSolidHeart : faRegularHeart} />
               {comment.get("likes") || 0}
             </button>
-            <button onClick={() => handleToggleReply(comment)}>
+            <button onClick={() => handleToggleReply(comment)} style={{ marginLeft: '1em' }}>
               Reply
             </button>
             {replyingTo && replyingTo.id === comment.id && (
-              <form onSubmit={handleReply}>
+              <form onSubmit={handleReply} style={{ marginTop: '10px' }}>
                 <input
                   type="text"
                   placeholder="Your reply"
@@ -188,7 +193,7 @@ const Comments = () => {
                 <button type="submit">Add Reply</button>
               </form>
             )}
-            <ul>
+            <ul style={{ marginTop: '10px' }}>
               {replies[comment.id]?.map((reply) => (
                 <li key={reply.id}>
                   <p>{reply.get("body")}</p>
