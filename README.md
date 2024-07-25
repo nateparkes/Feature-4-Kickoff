@@ -21,6 +21,10 @@ Installation: npm install @fontsource/roboto
 
 Installation: npm install @fortawesome/react-fontawesome @fortawesome/free-solid-svg-icons @fortawesome/free-regular-svg-icons
 
+## Parse (used to fetch data from back4app)
+
+Installation: npm install parse
+
 # Documentation
 
 Here is the component tree for our project (feature 4, outdated): ![Component Tree](./Tree_diagram.png)
