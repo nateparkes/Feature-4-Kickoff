@@ -27,7 +27,7 @@ Installation: npm install parse
 
 # Documentation
 
-Here is the component tree for our project (feature 4, outdated): ![Component Tree](./Tree_diagram.png)
+Here is the component tree for our project (feature 4, outdated): ![Component Tree](./tree_diagram_6.png)
 
 Here is the UML for our project: ![UML](./UML.png)
 
