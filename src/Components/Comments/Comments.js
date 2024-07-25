@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as faSolidHeart } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as faRegularHeart } from '@fortawesome/free-regular-svg-icons';
 
+
 const Comments = () => {
   const location = useLocation(); // to access the current location and its state
   const navigate = useNavigate(); // for programmatic navigation
@@ -96,6 +97,7 @@ const Comments = () => {
       );
     } catch (error) {
       console.error("Error liking comment:", error);
+
     }
   };
 
