@@ -5,21 +5,21 @@
 
 In addition to the Create React App (see below), before running the application, you'll need to install several packages.
 
-React Router DOM (used for routing)
-Installation:
-npm install react-router-dom
+##React Router DOM (used for routing)
 
-Material-UI (MUI) (used for button and input styling)
-Installation:
-npm install @mui/material @emotion/react @emotion/styled
+Installation: npm install react-router-dom
 
-Fontsource Roboto (default font used by Matrial-UI components)
-Installation:
-npm install @fontsource/roboto
+##Material-UI (MUI) (used for button and input styling)
 
-Font Awesome (user for "like" icons)
-Installation:
-npm install @fortawesome/react-fontawesome @fortawesome/free-solid-svg-icons @fortawesome/free-regular-svg-icons
+Installation: npm install @mui/material @emotion/react @emotion/styled
+
+##Fontsource Roboto (default font used by Matrial-UI components)
+
+Installation: npm install @fontsource/roboto
+
+##Font Awesome (user for "like" icons)
+
+Installation: npm install @fortawesome/react-fontawesome @fortawesome/free-solid-svg-icons @fortawesome/free-regular-svg-icons
 
 # Documentation
 
