@@ -9,6 +9,7 @@ export const likeComment = async (commentId, userId) => {
 
   try {
     const comment = await commentQuery.get(commentId);
+    const movie = comment.get('movie'); // Assuming the comment has a pointer to the movie
     likeQuery.equalTo("comment", comment);
     likeQuery.equalTo("user", Parse.User.createWithoutData(userId));
 
@@ -22,6 +23,7 @@ export const likeComment = async (commentId, userId) => {
       // If the user has not liked the comment, add a like
       const newLike = new Like();
       newLike.set("comment", comment);
+      newLike.set("movie", movie); // Set the movie property
       newLike.set("user", Parse.User.createWithoutData(userId));
       await newLike.save();
       comment.increment("likes");
