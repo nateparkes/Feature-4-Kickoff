@@ -1,7 +1,29 @@
 # Student A: Nate Parkes
 # Student B: Ruyuan Wan
 
-Here is the component tree for our project: ![Component Tree](./Tree_diagram.png)
+# Requirements
+
+In addition to the Create React App (see below), before running the application, you'll need to install several packages.
+
+React Router DOM (used for routing)
+Installation:
+npm install react-router-dom
+
+Material-UI (MUI) (used for button and input styling)
+Installation:
+npm install @mui/material @emotion/react @emotion/styled
+
+Fontsource Roboto (default font used by Matrial-UI components)
+Installation:
+npm install @fontsource/roboto
+
+Font Awesome (user for "like" icons)
+Installation:
+npm install @fortawesome/react-fontawesome @fortawesome/free-solid-svg-icons @fortawesome/free-regular-svg-icons
+
+# Documentation
+
+Here is the component tree for our project (feature 4, outdated): ![Component Tree](./Tree_diagram.png)
 
 Here is the UML for our project: ![UML](./UML.png)
 
