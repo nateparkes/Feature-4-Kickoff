@@ -13,13 +13,15 @@ const Main = () => {
   const [watchlist, setWatchlist] = useState(new Map()); //creates empty Map to hold watchlist data
   const navigate = useNavigate(); // for programmatic navigation
 
-  // Fetch movies on component mount
+  // Fetch movies and watchlist on component mount
   useEffect(() => {
     getAllMovies().then((movies) => {
       setMovies(movies);
-    });
-    fetchWatchlist();
-  }, []);
+    }); // get the movies from the backend and update the state
+    fetchWatchlist().then((watchlistData) => {
+      setWatchlist(watchlistData); //update the watchlist state
+      });
+    }, []);
 
   // Handle movie selection
   const handleMovieSelect = (movie) => {
@@ -49,7 +51,9 @@ const Main = () => {
   // Handle checkbox change
   const handleCheckboxChange = async (movie, checked) => { //declare an aysnc function that accepts "movie" and "checked" (boolean) as arguments
     await toggleWatchlistStatus(movie,checked); //await the watchlist data service
-    setWatchlist(new Map(watchlist.set(movie.id,checked))); //update the watchlist state with a Map of the results
+    const updatedWatchlist = new Map(watchlist); //create a new map to avoid mutation
+    updatedWatchlist.set(movie.id, checked); //update the new map with the new state
+    setWatchlist(updatedWatchlist); //update the watchlist state with a Map of the results
   };
  
 

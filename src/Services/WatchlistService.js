@@ -5,7 +5,7 @@ import Parse from "parse";
     const currentUser = Parse.User.current();
     if (!currentUser){
       console.log("Not pulling watchlist data; user is not logged in.")
-      return; //if the user isn't logged in, the function ends here
+      return new Map(); //return empty map if the user is not logged in
     }
     const Watchlist = Parse.Object.extend("Watchlist"); //creates a local representation of the Watchlist class in the backend
     const query = new Parse.Query(Watchlist); //creates a parse query targeting the Watchlist class
